@@ -1,0 +1,58 @@
+{
+  "aplicacion": {
+    "baseUrl": "https://buggy.justtestit.org",
+    "titulo": "Buggy Cars Rating",
+    "timeout": 30000
+  },
+  "navegacion": {
+    "rutaPrincipal": "/",
+    "rutaRegistro": "/register",
+    "rutaPerfil": "/profile",
+    "rutaAdmin": "/admin"
+  },
+  "mensajes": {
+    "loginExitoso": "Hi,",
+    "loginFallido": "Invalid username/password",
+    "votacionExitosa": "Thank you for your vote!",
+    "votacionFallida": "You have already voted on this model",
+    "sinSesion": "You need to login to vote",
+    "comentarioRequerido": "Please enter a comment"
+  },
+  "selectores": {
+    "login": {
+      "campoUsuario": "input[name='login']",
+      "campoPassword": "input[name='password']",
+      "botonLogin": "button[type='submit'].btn-success",
+      "errorLogin": "span.label-warning",
+      "usuarioLogueado": "span.nav-link.disabled",
+      "botonLogout": "a[onclick*='doLogout']"
+    },
+    "navegacion": {
+      "logo": "a.navbar-brand",
+      "menuPrincipal": ".navbar-nav",
+      "linkRegistro": "a[routerLink='register']",
+      "linkPerfil": "a[routerLink='profile']"
+    },
+    "votacion": {
+      "botonVotar": "button.btn-success",
+      "campoComentario": "#comment",
+      "contadorVotos": "h4 strong",
+      "mensajeEstado": ".card-text",
+      "alertaError": ".alert-danger",
+      "alertaExito": ".alert-success"
+    },
+    "comentarios": {
+      "tablaComentarios": "table.table",
+      "filaComentario": "table.table tbody tr",
+      "encabezadoFecha": "th:contains('Date')",
+      "encabezadoAutor": "th:contains('Author')",
+      "encabezadoComentario": "th:contains('Comment')"
+    },
+    "auto": {
+      "imagen": ".img-thumbnail",
+      "descripcion": ".card-text",
+      "especificaciones": ".list-group",
+      "linkDetalle": "a[routerLink*='model']"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "usuarioValido": {
+    "username": "testmail@gmail.com",
+    "password": "Test1234!",
+    "email": "testmail@gmail.com",
+    "firstName": "test",
+    "lastName": "user"
+  },
+  "usuarioInvalido": {
+    "username": "usuarioInexistente",
+    "password": "passwordIncorrecto",
+    "email": "invalid@test.com"
+  },
+  "usuariosAdicionales": [
+    {
+      "username": "testmail@gmail.com",
+      "password": "Test1234!",
+      "email": "testmail@gmail.com",
+      "firstName": "test",
+      "lastName": "user",
+      "role": "user"
+    },
+    {
+      "username": "voter1@test.com",
+      "password": "test123",
+      "email": "voter1@test.com",
+      "firstName": "Voter",
+      "lastName": "One"
+    },
+    {
+      "username": "voter2@test.com",
+      "password": "test123",
+      "email": "voter2@test.com",
+      "firstName": "Voter",
+      "lastName": "Two"
+    }
+  ],
+  "credencialesIncorrectas": [
+    {
+      "username": "",
+      "password": "password123",
+      "descripcion": "Username vacío"
+    },
+    {
+      "username": "testuser",
+      "password": "",
+      "descripcion": "Password vacío"
+    },
+    {
+      "username": "user@#$%",
+      "password": "pass",
+      "descripcion": "Caracteres especiales"
+    },
+    {
+      "username": "a".repeat(100),
+      "password": "pass",
+      "descripcion": "Username muy largo"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # Servicio principal de pruebas automatizadas
+  automatizacion-buggy-cars:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: buggy-cars-testing
+    environment:
+      - NODE_ENV=test
+      - HEADLESS=true
+      - DISPLAY=:99
+    volumes:
+      # Montar directorios de resultados para persistir datos
+      - ./screenshots:/app/screenshots
+      - ./logs:/app/logs
+      - ./allure-results:/app/allure-results
+      - ./test-results:/app/test-results
+    networks:
+      - testing-network
+    command: npm run test:docker
+    
+  # Servicio para generar reportes
+  reporte-allure:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: buggy-cars-reportes
+    environment:
+      - NODE_ENV=test
+    volumes:
+      - ./allure-results:/app/allure-results
+      - ./allure-report:/app/allure-report
+    ports:
+      - "4444:4444"
+    networks:
+      - testing-network
+    command: npm run test:reporte
+    depends_on:
+      - automatizacion-buggy-cars
+    profiles:
+      - reportes
+
+  # Servicio Selenium Hub (opcional para ejecución distribuida)
+  selenium-hub:
+    image: selenium/hub:4.15.0
+    container_name: selenium-hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+    environment:
+      - GRID_MAX_SESSION=16
+      - GRID_BROWSER_TIMEOUT=300
+      - GRID_TIMEOUT=300
+    networks:
+      - testing-network
+    profiles:
+      - selenium-grid
+
+  # Nodo Chrome para Selenium Grid
+  chrome-node:
+    image: selenium/node-chrome:4.15.0
+    container_name: chrome-node
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+      - NODE_MAX_INSTANCES=2
+      - NODE_MAX_SESSION=2
+    networks:
+      - testing-network
+    profiles:
+      - selenium-grid
+
+networks:
+  testing-network:
+    driver: bridge
+
+volumes:
+  screenshots-data:
+  logs-data:
+  allure-data:
