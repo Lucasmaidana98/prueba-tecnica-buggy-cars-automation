@@ -32,6 +32,7 @@
     "allure-commandline": "^2.34.0",
     "axios": "^1.10.0",
     "chai": "^4.5.0",
+    "chromedriver": "^137.0.4",
     "eslint": "^8.57.1",
     "moment": "^2.30.1",
     "wdio-chromedriver-service": "^8.1.1"

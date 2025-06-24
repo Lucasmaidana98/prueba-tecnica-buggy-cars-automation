@@ -52,7 +52,7 @@
       "descripcion": "Caracteres especiales"
     },
     {
-      "username": "a".repeat(100),
+      "username": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "password": "pass",
       "descripcion": "Username muy largo"
     }

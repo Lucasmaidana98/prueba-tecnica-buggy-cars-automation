@@ -84,28 +84,27 @@ global.log = {
     }
 };
 
-// Configurar hooks para mejor logging
-before(function() {
+// Helper functions for hooks (to be used in test files)
+global.logInicio = function() {
     log.seccion('INICIO DE SUITE DE PRUEBAS');
     log.info(`Timestamp: ${moment().format('YYYY-MM-DD HH:mm:ss')}`);
-    log.info(`URL Base: ${browser.config.baseUrl}`);
-});
+};
 
-beforeEach(function() {
-    log.prueba(this.currentTest.title);
-});
+global.logPrueba = function(titulo) {
+    log.prueba(titulo);
+};
 
-afterEach(function() {
-    if (this.currentTest.state === 'failed') {
-        log.error(`Prueba falló: ${this.currentTest.title}`);
-        capturarPantallaConNombre(this.currentTest.title, 'FAILED');
-    } else {
-        log.exito(`Prueba exitosa: ${this.currentTest.title}`);
+global.logFinalizacion = function(test) {
+    if (test && test.state === 'failed') {
+        log.error(`Prueba falló: ${test.title}`);
+        capturarPantallaConNombre(test.title, 'FAILED');
+    } else if (test) {
+        log.exito(`Prueba exitosa: ${test.title}`);
     }
-});
+};
 
-after(function() {
+global.logFin = function() {
     log.seccion('FIN DE SUITE DE PRUEBAS');
-});
+};
 
 console.log('🚀 Setup de helpers cargado exitosamente');
