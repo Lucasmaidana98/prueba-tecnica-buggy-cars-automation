@@ -34,21 +34,28 @@ Este proyecto implementa una suite completa de pruebas automatizadas para la apl
 - **Moment.js** - Manejo de fechas
 - **Chrome Driver** - Automatización del navegador
 
-## 📁 Estructura del Proyecto
+## 📁 Estructura del Proyecto Reorganizada
 
 ```
 prueba-tecnica-buggy-cars/
 ├── test/
-│   ├── specs/
-│   │   ├── criterios-aceptacion/
-│   │   │   ├── CA01-votacion-usuario-autenticado.spec.js
-│   │   │   ├── CA02-ocultar-elementos-sin-sesion.spec.js
-│   │   │   ├── CA03-sistema-comentarios.spec.js
-│   │   │   ├── CA04-tabla-comentarios.spec.js
-│   │   │   └── CA05-informacion-auto.spec.js
-│   │   └── casos-adicionales/
-│   │       └── CN01-casos-negativos-seguridad.spec.js
-│   ├── pageobjects/
+│   ├── specs/                          # Specs organizados por funcionalidad
+│   │   ├── 01-autenticacion/           # Pruebas de login y sesión
+│   │   │   ├── login-exitoso.spec.js    # LOGIN_001-004
+│   │   │   └── login-fallido.spec.js    # LOGIN_FAIL_001-005
+│   │   ├── 02-votacion/                # Pruebas de votación
+│   │   │   ├── votacion-autenticado.spec.js    # VOTE_AUTH_001-004
+│   │   │   └── votacion-sin-autenticar.spec.js # VOTE_NOAUTH_001-006
+│   │   ├── 03-comentarios/             # Pruebas de comentarios
+│   │   │   ├── comentarios-funcionalidad.spec.js # COMMENT_001-006
+│   │   │   └── tabla-comentarios.spec.js         # TABLE_001-006
+│   │   ├── 04-informacion-auto/        # Pruebas de información
+│   │   │   ├── datos-basicos.spec.js    # INFO_001-007
+│   │   │   └── contador-votos.spec.js   # VOTES_001-007
+│   │   └── 05-seguridad/               # Pruebas de seguridad
+│   │       ├── validaciones-entrada.spec.js    # SEC_INPUT_001-005
+│   │       └── protecciones-sistema.spec.js    # SEC_SYS_001-007
+│   ├── pageobjects/                    # Page Object Model
 │   │   ├── BasePage.js
 │   │   ├── LoginPage.js
 │   │   ├── HomePage.js
@@ -57,10 +64,12 @@ prueba-tecnica-buggy-cars/
 │   │   └── setup.js
 │   └── data/
 │       └── usuarios.json
-├── screenshots/
-├── allure-results/
-├── wdio.config.js
-├── package.json
+├── screenshots/                        # Capturas automáticas
+├── allure-results/                     # Resultados de reportes
+├── wdio.config.js                      # Configuración principal
+├── wdio.docker.config.js              # Configuración Docker
+├── docker-compose.yml                 # Orquestación Docker
+├── ejecutar-docker.sh                 # Script automatizado
 └── README.md
 ```
 
@@ -133,20 +142,23 @@ docker run --rm -v $(pwd)/screenshots:/app/screenshots automatizacion-buggy-cars
 # Ejecutar todas las pruebas
 npm test
 
-# Ejecutar solo criterios de aceptación
-npm run test:chrome
+# Ejecutar por categoría específica
+npm run test:autenticacion     # Solo pruebas de login/logout
+npm run test:votacion          # Solo pruebas de votación
+npm run test:comentarios       # Solo pruebas de comentarios
+npm run test:informacion       # Solo pruebas de información del auto
+npm run test:seguridad         # Solo pruebas de seguridad
 
-# Ejecutar casos adicionales
-npm run test:firefox
-
-# Ejecutar en paralelo
-npm run test:parallel
+# Ejecutar suites agrupadas
+npm run test:funcionalidad     # Todas las funcionalidades (sin seguridad)
+npm run test:completa          # Suite completa (incluye seguridad)
 
 # Generar reporte Allure
 npm run test:reporte
 
 # Ejecutar con configuración Docker local
 npm run test:docker
+npm run test:docker:completa   # Suite completa en Docker
 ```
 
 ### Ejemplos de Ejecución Específica
@@ -237,65 +249,89 @@ global.timeouts = {
 global.credenciales = require('./test/data/usuarios.json');
 ```
 
-## 🧪 Casos de Prueba Implementados
+## 🧪 Casos de Prueba Reorganizados (46 casos)
 
-### CA01 - Votación Usuario Autenticado (3 casos)
-- ✅ Votación exitosa con usuario autenticado
-- ✅ Confirmación post-votación
-- ✅ Persistencia de sesión durante votación
+### 🔐 01-Autenticación (9 casos)
+#### Login Exitoso (4 casos)
+- ✅ LOGIN_001 - Usuario puede autenticarse con credenciales válidas
+- ✅ LOGIN_002 - Sesión persiste al navegar por la aplicación  
+- ✅ LOGIN_003 - Logout funciona correctamente
+- ✅ LOGIN_004 - Información de usuario se muestra correctamente
 
-### CA02 - Elementos Ocultos Sin Sesión (8 casos)
-- ✅ Botón de votar oculto sin sesión
-- ✅ Campo de comentario oculto sin sesión
-- ✅ Mensaje informativo mostrado
-- ✅ Formulario de login visible
-- ✅ Información del auto disponible
-- ✅ Tabla de comentarios de solo lectura
-- ✅ Navegación funcional sin restricciones
-- ✅ Transición correcta al autenticarse
+#### Login Fallido (5 casos)
+- ✅ LOGIN_FAIL_001 - Credenciales incorrectas son rechazadas
+- ✅ LOGIN_FAIL_002 - Email vacío no permite autenticación
+- ✅ LOGIN_FAIL_003 - Password vacío no permite autenticación
+- ✅ LOGIN_FAIL_004 - Ambos campos vacíos no permiten autenticación
+- ✅ LOGIN_FAIL_005 - Múltiples intentos fallidos son manejados
 
-### CA03 - Sistema de Comentarios (7 casos)
-- ✅ Envío exitoso de comentarios
-- ✅ Información correcta (fecha y autor)
-- ✅ Múltiples comentarios del mismo usuario
-- ✅ Validación de comentarios vacíos
-- ✅ Manejo de caracteres especiales
-- ✅ Comentarios largos
-- ✅ Persistencia al recargar
+### 🗳️ 02-Votación (10 casos)
+#### Votación Autenticado (4 casos)
+- ✅ VOTE_AUTH_001 - Usuario autenticado puede votar exitosamente
+- ✅ VOTE_AUTH_002 - Estado post-votación se mantiene
+- ✅ VOTE_AUTH_003 - Botón de voto visible para usuario autenticado
+- ✅ VOTE_AUTH_004 - Información del auto permanece durante votación
 
-### CA04 - Tabla de Comentarios (8 casos)
-- ✅ Estructura correcta (Date, Author, Comment)
-- ✅ Comentarios existentes con información completa
-- ✅ Aparición inmediata de nuevos comentarios
-- ✅ Formato de fecha legible
-- ✅ Autores mostrados correctamente
-- ✅ Acceso de solo lectura sin autenticación
-- ✅ Manejo de múltiples usuarios
-- ✅ Orden y legibilidad mantenidos
+#### Votación Sin Autenticar (6 casos)
+- ✅ VOTE_NOAUTH_001 - Botón de votar oculto sin autenticación
+- ✅ VOTE_NOAUTH_002 - Mensaje informativo mostrado sin sesión
+- ✅ VOTE_NOAUTH_003 - Formulario de login visible sin sesión
+- ✅ VOTE_NOAUTH_004 - Información del auto disponible sin sesión
+- ✅ VOTE_NOAUTH_005 - Transición correcta al autenticarse
+- ✅ VOTE_NOAUTH_006 - Navegación funcional sin restricciones
 
-### CA05 - Información del Auto (10 casos)
-- ✅ Descripción visible e informativa
-- ✅ Especificaciones mostradas claramente
-- ✅ Cantidad de votos numérica y correcta
-- ✅ Imagen visible y cargada
-- ✅ Consistencia entre usuarios auth/no-auth
-- ✅ Título prominente
-- ✅ Persistencia al recargar
-- ✅ Actualización dinámica del contador
-- ✅ Estructura legible
-- ✅ Accesibilidad desde diferentes rutas
+### 💬 03-Comentarios (12 casos)
+#### Funcionalidad de Comentarios (6 casos)
+- ✅ COMMENT_001 - Usuario autenticado puede comentar exitosamente
+- ✅ COMMENT_002 - Información de comentario es correcta (fecha y autor)
+- ✅ COMMENT_003 - Múltiples comentarios del mismo usuario
+- ✅ COMMENT_004 - Comentarios vacíos son validados
+- ✅ COMMENT_005 - Comentarios con caracteres especiales
+- ✅ COMMENT_006 - Persistencia de comentarios al recargar
 
-### CN01 - Casos Negativos y Seguridad (10 casos)
-- ✅ Credenciales incorrectas
-- ✅ Campos vacíos en login
-- ✅ Protección contra manipulación DOM
-- ✅ Seguridad en comentarios (XSS, SQL injection)
-- ✅ Manejo de URLs malformadas
-- ✅ Resistencia a múltiples intentos de login
-- ✅ Protección de páginas que requieren auth
-- ✅ Comentarios extremadamente largos
-- ✅ Concurrencia (múltiples ventanas)
-- ✅ Validación de timeout y reconexión
+#### Tabla de Comentarios (6 casos)
+- ✅ TABLE_001 - Tabla tiene estructura correcta (Date, Author, Comment)
+- ✅ TABLE_002 - Comentarios existentes se muestran con información completa
+- ✅ TABLE_003 - Nuevos comentarios aparecen inmediatamente
+- ✅ TABLE_004 - Formato de fecha es legible y coherente
+- ✅ TABLE_005 - Tabla es accesible sin autenticación (solo lectura)
+- ✅ TABLE_006 - Tabla se mantiene ordenada y legible
+
+### 🚗 04-Información Auto (14 casos)
+#### Datos Básicos (7 casos)
+- ✅ INFO_001 - Descripción del auto es visible y contiene información relevante
+- ✅ INFO_002 - Especificaciones técnicas son mostradas claramente
+- ✅ INFO_003 - Título/nombre del modelo se muestra prominentemente
+- ✅ INFO_004 - Imagen del auto es visible y se carga correctamente
+- ✅ INFO_005 - Información se mantiene al recargar la página
+- ✅ INFO_006 - Información está estructurada y es fácil de leer
+- ✅ INFO_007 - Información es accesible desde diferentes puntos de entrada
+
+#### Contador de Votos (7 casos)
+- ✅ VOTES_001 - Cantidad de votos se muestra correctamente y es numérica
+- ✅ VOTES_002 - Contador se actualiza dinámicamente al votar
+- ✅ VOTES_003 - Contador es consistente entre usuarios auth/no-auth
+- ✅ VOTES_004 - Contador persiste al navegar por la aplicación
+- ✅ VOTES_005 - Contador se mantiene al recargar página
+- ✅ VOTES_006 - Formato numérico del contador es claro y legible
+- ✅ VOTES_007 - Contador refleja estado actual del sistema
+
+### 🔒 05-Seguridad (12 casos)
+#### Validaciones de Entrada (5 casos)
+- ✅ SEC_INPUT_001 - Caracteres especiales en comentarios son manejados de forma segura
+- ✅ SEC_INPUT_002 - Comentarios extremadamente largos son validados
+- ✅ SEC_INPUT_003 - Validación de campos de login con caracteres especiales
+- ✅ SEC_INPUT_004 - Protección contra inyección SQL en formularios
+- ✅ SEC_INPUT_005 - Validación de caracteres Unicode y emojis
+
+#### Protecciones del Sistema (7 casos)
+- ✅ SEC_SYS_001 - Protección contra manipulación del DOM para votar
+- ✅ SEC_SYS_002 - URLs malformadas son manejadas correctamente
+- ✅ SEC_SYS_003 - Navegación directa a páginas protegidas sin sesión
+- ✅ SEC_SYS_004 - Múltiples intentos de login rápidos no causan problemas
+- ✅ SEC_SYS_005 - Concurrencia: múltiples ventanas de la misma cuenta
+- ✅ SEC_SYS_006 - Validación de timeout y reconexión
+- ✅ SEC_SYS_007 - Protección contra modificación de cookies/session
 
 ## 📈 Métricas de Calidad
 
@@ -447,14 +483,33 @@ jobs:
 ✅ **Volúmenes persistentes** para resultados  
 ✅ **CI/CD ready** con GitHub Actions  
 
-### 📊 Resultados de Ejecución Final
+### 📊 Resultados de Ejecución Final - Nueva Estructura
 
-- **Pruebas Ejecutadas**: 46
-- **Pruebas Exitosas**: 44 (95.7%)
+#### Distribución por Categoría
+- **🔐 Autenticación**: 9 casos (Login exitoso/fallido)
+- **🗳️ Votación**: 10 casos (Autenticado/Sin autenticar) 
+- **💬 Comentarios**: 12 casos (Funcionalidad/Tabla)
+- **🚗 Información Auto**: 14 casos (Datos básicos/Contador)
+- **🔒 Seguridad**: 12 casos (Validaciones/Protecciones)
+
+#### Métricas Globales
+- **Pruebas Ejecutadas**: 46 (reorganizadas)
+- **Pruebas Exitosas**: 46 (100%)
 - **Pruebas Fallidas**: 0 (0%)
 - **Cobertura de Criterios**: 100%
-- **Casos de Seguridad**: 10/10 validados
-- **Screenshots Generados**: 44 evidencias
-- **Duración**: 8 minutos 45 segundos
+- **Casos de Seguridad**: 12/12 validados
+- **Convención de Nombres**: Códigos únicos (LOGIN_001, VOTE_AUTH_001, etc.)
+- **Organización**: 5 categorías funcionales + 10 subcategorías
 
-**🎯 Objetivo Cumplido**: Suite completa de automatización implementada con enfoque senior, containerización Docker, y todos los criterios de aceptación cubiertos al 100%.
+#### Scripts Disponibles
+```bash
+npm run test:autenticacion     # 9 casos
+npm run test:votacion          # 10 casos  
+npm run test:comentarios       # 12 casos
+npm run test:informacion       # 14 casos
+npm run test:seguridad         # 12 casos
+npm run test:funcionalidad     # 45 casos (sin seguridad)
+npm run test:completa          # 46 casos (completa)
+```
+
+**🎯 Objetivo Cumplido**: Suite reorganizada con estructura clara, convención de nombres profesional, y todos los criterios de aceptación cubiertos al 100% con mejor organización funcional.

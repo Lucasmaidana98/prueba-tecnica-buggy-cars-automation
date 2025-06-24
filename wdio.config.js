@@ -14,13 +14,36 @@ exports.config = {
         './test/specs/ejemplos/**/*.js'
     ],
 
-    // Suites de pruebas
+    // Suites de pruebas reorganizadas por funcionalidad
     suites: {
-        criterios: [
-            './test/specs/criterios-aceptacion/**/*.js'
+        autenticacion: [
+            './test/specs/01-autenticacion/**/*.js'
         ],
-        adicionales: [
-            './test/specs/pruebas-adicionales/**/*.js'
+        votacion: [
+            './test/specs/02-votacion/**/*.js'
+        ],
+        comentarios: [
+            './test/specs/03-comentarios/**/*.js'
+        ],
+        informacion: [
+            './test/specs/04-informacion-auto/**/*.js'
+        ],
+        seguridad: [
+            './test/specs/05-seguridad/**/*.js'
+        ],
+        // Suites agrupadas para ejecutar categorías completas
+        funcionalidad: [
+            './test/specs/01-autenticacion/**/*.js',
+            './test/specs/02-votacion/**/*.js',
+            './test/specs/03-comentarios/**/*.js',
+            './test/specs/04-informacion-auto/**/*.js'
+        ],
+        completa: [
+            './test/specs/01-autenticacion/**/*.js',
+            './test/specs/02-votacion/**/*.js',
+            './test/specs/03-comentarios/**/*.js',
+            './test/specs/04-informacion-auto/**/*.js',
+            './test/specs/05-seguridad/**/*.js'
         ]
     },
 
